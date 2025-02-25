@@ -1,25 +1,40 @@
-pluginManagement {
-    def flutterSdkPath = {
-        def properties = new Properties()
-        file("local.properties").withInputStream { properties.load(it) }
-        def flutterSdkPath = properties.getProperty("flutter.sdk")
-        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
-        return flutterSdkPath
-    }()
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 
-    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
-
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+void main() {
+  runApp(const MyApp());
 }
 
-plugins {
-    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    id "com.android.application" version "8.1.0" apply false
-    id "org.jetbrains.kotlin.android" version "1.8.22" apply false
-}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-include ":app"
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('URL Image Load'),
+          backgroundColor: Colors.blue,
+          elevation: 10,
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            CachedNetworkImage(
+              imageUrl:
+                  "https://media.istockphoto.com/id/1086610760/photo/mature-man-looking-at-full-moon-in-sky-at-night.jpg?s=612x612&w=0&k=20&c=UTG8mLg6wSAW9WIKChvliM0XwV-yU7s0GBblBHYqkJw=",
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Text("Error Loading Image"),
+            ),
+            Image.network(
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfrtq8ddSfekNypcgtvBS5r-f3l1rGtfEgzw&s"),
+            Image.network(
+                "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"),
+          ],
+        )),
+      ),
+    );
+  }
+}
